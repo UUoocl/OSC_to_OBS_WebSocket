@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>ZoomOSC to OBS WebSocket Server</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="viewport" content="width=700, user-scalable=no" />
+	<link href="style.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+	<nav class="toc">
+		<ul>
+			<li><a href="#Intro">OSC to OBS WebSocket</a></li>
+			<li>
+				<a href="#srvr">Servers</a>
+				<ul>
+					<li><a href="#srvr-obs-ws">OBS WebSocket Server</a></li>
+					<li><a href="#srvr-osc">OSC Server</a></li>
+					
+				</ul>
+			</li>
+			
+
+		</ul>
+		<svg class="toc-marker" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+			<path stroke="#444" stroke-width="3" fill="transparent" stroke-dasharray="0, 0, 0, 1000"
+				stroke-linecap="round" stroke-linejoin="round" transform="translate(-0.5, -0.5)" />
+		</svg>
+	</nav>
+
+	<article class="contents">
+		<section id="intro">
+			<h2>ZoomOSC to OBS WebSocket Server</h2>
+
+		</section>
+
+		<section>
+			<div id="srvr">
+				<h2>Connections</h2>
+				<p></p>
+			</div>
+			<div id="srvr-obs-ws">
+				<h3>OBS WebSocket Server</h3>
+				<p><label for="IP">Enter IP address or "localhost":</label>
+					<input type="text" id="IP" name="IP" value="ip" /><br>
+					<label for="Port">Enter Port Number:</label>
+					<input type="text" id="Port" name="Port" value="port" /><br>
+					<label for="PW">Enter Password:</label>
+					<input type="password" id="PW" name="PW" value="password" /><br>
+					<input type="button" id="WSconnectButton" value="Connect to OBS" /><br>
+				</p>
+			</div>
+
+			<div id="srvr-osc">
+				<h3>Open Sound Control Server</a></h3>
+				<p><label for="oscIP">Enter OSC IP address or "localhost":</label>
+					<input type="text" id="oscIP" name="oscIP" value="127.0.0.1" /><br>
+					<label for="oscInPORT">Enter OSC In (receive) Port Number:</label>
+					<input type="text" id="oscInPORT" name="oscInPort" value="1234" /><br>
+					<label for="oscOutPORT">Enter OSC Out (transport) Port Number:</label>
+					<input type="text" id="oscOutPORT" name="oscOutPort" value="9090" /><br>
+					<input type="button" id="oscButton" value="Create OSC Server" />
+				</p>
+			</div>
+
+			
+	</article>
+
+	<div class="credits">
+		<a href="https://github.com/UUoocl/MediaPipe_for_OBS">Source on GitHub</a>
+	</div>
+
+	<style type="text/css" media="screen">
+		.credits {
+			position: fixed;
+			left: 3em;
+			bottom: 4em;
+			font-size: 1em;
+			z-index: 20;
+			color: #444;
+			vertical-align: middle;
+		}
+
+		.credits *+* {
+			margin-top: 15px;
+		}
+
+		.credits a {
+			display: block;
+			padding: 8px 10px;
+			color: #777;
+			border: 2px solid #bbb;
+			background: #fff;
+			text-decoration: none;
+		}
+
+		.credits a:hover {
+			border-color: #555;
+			color: #222;
+		}
+
+		@media screen and (max-height: 700px) {
+			.credits {
+				display: none;
+			}
+		}
+	</style>
+</body>
+
+</html>
