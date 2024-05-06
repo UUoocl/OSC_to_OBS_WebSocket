@@ -20,11 +20,11 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron/fuses": "^1.8.0",
-    "electron": "^28.3.0",
-    "obs-websocket-js": "^5.0.5"
+    "electron": "^28.3.0"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
-    "node-osc": "^9.1.1"
+    "node-osc": "^9.1.1",
+    "obs-websocket-js": "^5.0.5"
   }
 }
