@@ -1,10 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron/main");
 const path = require("path");
 const fs = require("fs");
-const oscServer = require("node-osc");
-
-
-const { electron } = require("process");
 
 //window variables
 let mainWindow, oscWindow;
@@ -24,12 +20,6 @@ app.whenReady().then(() => {
     }
   });
 });
-
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
-});
 //#endregion
 
 //#region create main window
@@ -42,80 +32,37 @@ async function createWindow() {
     y: 0,
     title: __dirname,
     webPreferences: {
+      sandbox: false,
+      nodeIntegration: true,
+      backgroundThrottling: false,
       preload: path.join(__dirname, "preload.js"),
     },
   });
-
+  
   // and load the index.html of the app.
   mainWindow.loadFile("index.html");
-
+  
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 }
 //#endregion
 
-//#region Open-osc-windows
-ipcMain.on(
-  "open-osc-window",
-  (event, IP, Port, PW, oscIP, oscInPORT, oscOutPORT) => {
-    console.log("main received osc window IPC");
-    oscWindow = new BrowserWindow({
-      width: 400,
-      height: 400,
-      x: 200,
-      y: 100,
-      title: "osc window",
-      frame: true,
-      resizable: true,
-      //roundedCorners: false,
-      movable: true,
-      titleBarOverlay: false,
-      transparent: false,
-      titleBarStyle: "default",
-      webPreferences: {
-        sandbox: false,
-        nodeIntegration: true,
-        backgroundThrottling: false,
-        preload: path.join(__dirname, "osc-preload.js"),
-      },
-    });
-
-    windowSetup = {
-      websocketIP: IP,
-      websocketPort: Port,
-      websocketPassword: PW,
-      oscInPORT: oscInPORT,
-      oscOutPORT: oscOutPORT,
-      oscIP: oscIP,
-    };
-    //console.log(windowSetup)
-    oscWindow.loadFile("osc.html");
-    //oscWindow.webContents.openDevTools()
-  }
-);
-//#endregion
-
 //#region IPC APIs
-//Send websocket and projector window to renderer
-ipcMain.handle("get-obsWSdetails", async () => {
-  console.log("sending window details to a new window");
-  console.log(windowSetup);
-  return windowSetup;
-});
 
 //#region IPC set OBS connection
 ipcMain.on("set-obs-connection", async (event, IP, Port, PW) => {
   console.log("setting OBS Connection");
-
+  
   webSocketDetails = {
     websocketIP: IP,
     websocketPort: Port,
-    websocketPassword: PW,
+    websocketPassword: PW
   };
   console.log(
     webSocketDetails.websocketIP,
     webSocketDetails.websocketPort,
-    webSocketDetails.websocketPassword
+    webSocketDetails.websocketPassword,
+    userPath
   );
   //write to file
   let sData = JSON.stringify(webSocketDetails);
@@ -135,17 +82,67 @@ ipcMain.handle("get-obs-connection", async (event) => {
     return data;
   }
 });
-
-ipcMain.on("wsConnect", (event) => {
-  console.log("sending websocket details to new window");
-  console.log(webSocketDetails);
-  event.returnValue = webSocketDetails;
-});
 //#endregion
+
+//#region IPC set ZoomOSC connection
+ipcMain.on("save-zosc-settings", async (event, oscIP, oscInPort, oscOutPort) => {
+  console.log("save settings ZoomOSC");
+  let zoscDetails = {
+    oscIP: oscIP, 
+    oscInPort: oscInPort,
+    oscOutPort: oscOutPort
+    };
+  const sData = JSON.stringify(zoscDetails);
+  const userpath = app.getPath("userData");
+  fs.writeFileSync(`${userpath}/zoomOSC_setting.txt`, sData);
+});
+
+ipcMain.handle("get-zoomosc-connection", async (event) => {
+  console.log("get ZoomOsc default settings");
+  const userpath = app.getPath("userData");
+  console.log(`${userpath}/zoomOSC_setting.txt`);
+  console.log(fs.existsSync(`${userpath}/zoomOSC_setting.txt`));
+  //console.log(fs.exists(`${userpath}/zoomOSC_setting.txt`))
+  if (fs.existsSync(`${userpath}/zoomOSC_setting.txt`)) {
+    let dt = fs.readFileSync(`${userpath}/zoomOSC_setting.txt`);
+    let data = JSON.parse(dt);
+    console.log(data);
+    return data;
+  }
+});
+
+//#region IPC set TouchOSC connection
+ipcMain.on("save-tosc-settings", async (event, oscIP, oscInPort, oscOutPort) => {
+  console.log("save settings TouchOSC");
+  let toscDetails = {
+    oscIP: oscIP, 
+    oscInPort: oscInPort,
+    oscOutPort: oscOutPort
+    };
+  const sData = JSON.stringify(toscDetails);
+  const userpath = app.getPath("userData");
+  fs.writeFileSync(`${userpath}/touchOSC_setting.txt`, sData);
+});
+
+ipcMain.handle("get-touchosc-connection", async (event) => {
+  console.log("get touchOsc default settings");
+  const userpath = app.getPath("userData");
+  console.log(`${userpath}/touchOSC_setting.txt`);
+  console.log(fs.existsSync(`${userpath}/touchOSC_setting.txt`));
+  //console.log(fs.exists(`${userpath}/zoomOSC_setting.txt`))
+  if (fs.existsSync(`${userpath}/touchOSC_setting.txt`)) {
+    let dt = fs.readFileSync(`${userpath}/touchOSC_setting.txt`);
+    let data = JSON.parse(dt);
+    console.log(data);
+    return data;
+  }
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on("window-all-closed", function () {
-  if (process.platform !== "darwin") app.quit();
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
 });

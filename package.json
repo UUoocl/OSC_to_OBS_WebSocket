@@ -1,7 +1,7 @@
 {
-  "name": "ZoomOSC_to_OBS_WebSocket_Server",
+  "name": "OSC_to_OBS_WebSocket_Server",
   "version": "0.0.1",
-  "description": "An app to transform ZoomOSC messages to OBS WebSocket Messages. ",
+  "description": "An app to transform OSC messages to OBS WebSocket Messages. ",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -20,7 +20,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron/fuses": "^1.8.0",
-    "electron": "^28.3.0"
+    "electron": "^28.3.1"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
@@ -28,3 +28,4 @@
     "obs-websocket-js": "^5.0.5"
   }
 }
+
