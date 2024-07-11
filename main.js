@@ -61,8 +61,7 @@ ipcMain.on("set-obs-connection", async (event, IP, Port, PW) => {
   console.log(
     webSocketDetails.websocketIP,
     webSocketDetails.websocketPort,
-    webSocketDetails.websocketPassword,
-    userPath
+    webSocketDetails.websocketPassword
   );
   //write to file
   let sData = JSON.stringify(webSocketDetails);
